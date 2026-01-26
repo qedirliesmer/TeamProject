@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\TeamProject.Application\TeamProject.Application.csproj" />
     <ProjectReference Include="..\..\Core\TeamProject.Domain\TeamProject.Domain.csproj" />
   </ItemGroup>
 

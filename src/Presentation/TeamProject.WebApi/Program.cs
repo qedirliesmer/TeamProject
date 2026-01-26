@@ -1,17 +1,26 @@
 using Microsoft.EntityFrameworkCore;
+using TeamProject.Application.Abstracts.Repositories;
 using TeamProject.Persistence.Contexts;
+using TeamProject.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TeamProjectDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(); 
+}
 
 app.UseHttpsRedirection();
 
