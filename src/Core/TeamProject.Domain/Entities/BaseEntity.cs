@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TeamProject.Domain.Entities;
 
-public class BaseEntity
+public class BaseEntity<T>
 {
-    public int Id { get; set; }
+    public T Id { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
 }

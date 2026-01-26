@@ -7,7 +7,7 @@ using TeamProject.Domain.Enums;
 
 namespace TeamProject.Domain.Entities;
 
-public class PropertyAd:BaseEntity
+public class PropertyAd:BaseEntity<int>
 {
     public string Title { get; set; }
     public string Description { get; set; }

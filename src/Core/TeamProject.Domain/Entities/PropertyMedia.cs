@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TeamProject.Domain.Entities;
 
-public class PropertyMedia:BaseEntity
+public class PropertyMedia:BaseEntity<int>
 {
     public  string MediaUrl { get; set; }
     public string MediaName { get; set; }
