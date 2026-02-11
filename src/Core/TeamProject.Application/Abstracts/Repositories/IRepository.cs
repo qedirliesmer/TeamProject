@@ -9,10 +9,10 @@ namespace TeamProject.Application.Abstracts.Repositories;
 
 public interface IRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
 {
-    List<TEntity> GetAll();
-    TEntity GetById(TKey id);
-    void Add(TEntity entity);
+    IQueryable<TEntity> GetAll(); 
+    Task<TEntity> GetByIdAsync(TKey id);
+    Task AddAsync(TEntity entity); 
     void Update(TEntity entity);
     void Delete(TEntity entity);
-    void SaveChanges();
+    Task<int> SaveChangesAsync(); 
 }

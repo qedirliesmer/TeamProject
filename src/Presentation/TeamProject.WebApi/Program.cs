@@ -1,17 +1,26 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TeamProject.Application.Abstracts.Repositories;
+using TeamProject.Application.Abstracts.Services;
+using TeamProject.Application.Abstracts.UnitOfWorks;
+using TeamProject.Application.Validations.CityValidations;
+using TeamProject.Application.Validations.DistrictValidations;
+using TeamProject.Infrastructure.Extensions;
+using TeamProject.Infrastructure.Services;
 using TeamProject.Persistence.Contexts;
 using TeamProject.Persistence.Repositories;
+using TeamProject.Persistence.Services;
+using TeamProject.Persistence.UnitOfWorks;
+using TeamProject.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApplicationServices(builder.Configuration);
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddDbContext<TeamProjectDbContext>(options=>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped(typeof(IRepository<,>), typeof(GenericRepository<,>));
 
 var app = builder.Build();
 
@@ -23,7 +32,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

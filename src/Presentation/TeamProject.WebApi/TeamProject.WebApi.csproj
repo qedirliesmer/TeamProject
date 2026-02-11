@@ -4,9 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9892d8b6-75e7-4778-a95e-5512c602b857</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.23">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -15,12 +20,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\TeamProject.Infrastructure\TeamProject.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TeamProject.Persistence\TeamProject.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 
 </Project>

@@ -6,10 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
   <ItemGroup>
-    <Folder Include="Abstracts\Services\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Validations\" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

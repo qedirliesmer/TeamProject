@@ -11,14 +11,31 @@ public class GenericRepository<TEntity, TKey> : IRepository<TEntity, TKey>
 {
     private readonly TeamProjectDbContext _context;
     private readonly DbSet<TEntity> _table;
+
     public GenericRepository(TeamProjectDbContext context)
     {
         _context = context;
         _table = _context.Set<TEntity>();
     }
-    public void Add(TEntity entity)
+
+    public IQueryable<TEntity> GetAll()
     {
-        _table.Add(entity);
+        return _table.AsNoTracking();
+    }
+
+    public async Task AddAsync(TEntity entity)
+    {
+        await _table.AddAsync(entity);
+    }
+
+    public async Task<TEntity> GetByIdAsync(TKey id)
+    {
+        return await _table.FindAsync(id);
+    }
+
+    public void Update(TEntity entity)
+    {
+        _table.Update(entity);
     }
 
     public void Delete(TEntity entity)
@@ -26,23 +43,8 @@ public class GenericRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         _table.Remove(entity);
     }
 
-    public List<TEntity> GetAll()
+    public async Task<int> SaveChangesAsync()
     {
-        return _table.ToList();
+        return await _context.SaveChangesAsync();
     }
-
-    public TEntity GetById(TKey id)
-    {
-        return _table.Find(id);
-    }
-
-    public void Update(TEntity entity)
-    {
-        _table.Update(entity);
-    }
-    public void SaveChanges()
-    {
-       _context.SaveChanges();
-    }
-
 }

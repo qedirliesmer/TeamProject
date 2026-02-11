@@ -8,9 +8,9 @@ namespace TeamProject.Domain.Entities;
 
 public class PropertyMedia:BaseEntity<int>
 {
-    public  string MediaUrl { get; set; }
-    public string MediaName { get; set; }
-    public int Order { get; set; } = 0;
+    public string ObjectKey { get; set; } = default!;
+    public int Order { get; set; }
     public int PropertyAdId { get; set; }
-    public PropertyAd PropertyAd{ get; set; }
+    public PropertyAd PropertyAd { get; set; } = default!;
+
 }
