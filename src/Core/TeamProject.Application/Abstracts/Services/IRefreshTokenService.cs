@@ -7,7 +7,8 @@ using TeamProject.Domain.Entities;
 
 namespace TeamProject.Application.Abstracts.Services;
 
-public interface IJwtTokenGenerator
+public interface IRefreshTokenService
 {
-    string GenerateAccessToken(User user);
+    Task<string> CreateAsync(User user);
+    Task<User?> ValidateAndConsumeAsync(string token);
 }

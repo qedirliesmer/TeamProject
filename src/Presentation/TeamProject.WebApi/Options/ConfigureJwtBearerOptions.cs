@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens.Experimental;
 using System.Text;
 using TeamProject.Application.Options;
 
@@ -19,16 +20,14 @@ public class ConfigureJwtBearerOptions : IConfigureOptions<JwtBearerOptions>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateIssuer = true, 
+            ValidateAudience = true,  
+            ValidateLifetime = true, 
             ValidateIssuerSigningKey = true,
 
-            ValidIssuer = _jwtOptions.Issuer,
-            ValidAudience = _jwtOptions.Audience,
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtOptions.Secret)),
+            ValidIssuer = _jwtOptions.Issuer, 
+           ValidAudience = _jwtOptions.Audience, 
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret)),  
 
             ClockSkew = TimeSpan.Zero
         };

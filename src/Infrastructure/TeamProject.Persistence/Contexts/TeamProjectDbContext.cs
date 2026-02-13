@@ -25,6 +25,7 @@ public class TeamProjectDbContext : IdentityDbContext<User>
     public DbSet<PropertyMedia> PropertyMedias { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<District> Districts { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 }
 

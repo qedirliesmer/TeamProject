@@ -19,6 +19,7 @@ using TeamProject.Persistence.Repositories;
 using TeamProject.Persistence.Services;
 using TeamProject.Persistence.UnitOfWorks;
 using TeamProject.WebApi.Options;
+using Microsoft.OpenApi.Models;
 
 namespace TeamProject.WebApi.Extensions;
 
@@ -66,11 +67,42 @@ public static class ServiceCollectionExtensions
         })
         .AddJwtBearer();
 
-        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+        services.AddSwaggerGen(c =>
+        {
+            c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                Description = "JWT Token daxil edin"
+            });
 
+            c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+        });
+
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+    
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IAuthService, AuthService>();
 
         return services;
+       
     }
 }

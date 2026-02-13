@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamProject.Persistence.Contexts;
 
@@ -11,9 +12,11 @@ using TeamProject.Persistence.Contexts;
 namespace TeamProject.Persistence.Migrations
 {
     [DbContext(typeof(TeamProjectDbContext))]
-    partial class TeamProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260213100630_AddedRefreshTokenTable")]
+    partial class AddedRefreshTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

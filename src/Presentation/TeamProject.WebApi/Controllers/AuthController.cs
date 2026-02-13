@@ -36,13 +36,31 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
     {
-        var token = await _authService.LoginAsync(request, ct);
+        var response = await _authService.LoginAsync(request, ct);
 
-        if (string.IsNullOrEmpty(token))
+        if (response == null)
         {
-            return Unauthorized(BaseResponse<string>.Fail("Invalid login or password."));
+            return Unauthorized(BaseResponse.Fail("Invalid login or password."));
+        }
+        return Ok(BaseResponse<TokenResponse>.Success(response));
+    }
+
+    [HttpPost("refresh")] 
+    [AllowAnonymous]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            return BadRequest(BaseResponse.Fail("Refresh token is required."));
         }
 
-        return Ok(BaseResponse<string>.Success(token));
+        var response = await _authService.RefreshTokenAsync(request.RefreshToken);
+
+        if (response == null)
+        {
+            return Unauthorized(BaseResponse.Fail("Invalid or expired refresh token."));
+        }
+
+        return Ok(BaseResponse<TokenResponse>.Success(response));
     }
 }
