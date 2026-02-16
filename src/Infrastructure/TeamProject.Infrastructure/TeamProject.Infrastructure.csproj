@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\TeamProject.Application\TeamProject.Application.csproj" />
+    <ProjectReference Include="..\..\Core\TeamProject.Domain\TeamProject.Domain.csproj" />
   </ItemGroup>
 
 </Project>

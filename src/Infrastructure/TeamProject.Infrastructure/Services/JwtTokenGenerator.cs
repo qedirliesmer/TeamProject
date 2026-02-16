@@ -22,7 +22,7 @@ public class JwtTokenGenerator:IJwtTokenGenerator
         _options = options.Value;
     }
 
-    public string GenerateAccessToken(User user)
+    public string GenerateAccessToken(User user, IEnumerable<string> roles)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -30,16 +30,20 @@ public class JwtTokenGenerator:IJwtTokenGenerator
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.Email, user.Email!), 
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
-            new("fullName", user.FullName ?? "") 
+            new(JwtRegisteredClaimNames.Email, user.Email!),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new("fullName", user.FullName ?? "")
         };
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var token = new JwtSecurityToken(
             issuer: _options.Issuer,
             audience: _options.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes), 
+            expires: DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes),
             signingCredentials: creds
         );
 

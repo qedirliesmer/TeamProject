@@ -9,5 +9,5 @@ namespace TeamProject.Application.Abstracts.Services;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateAccessToken(User user);
+    string GenerateAccessToken(User user, IEnumerable<string> roles);
 }

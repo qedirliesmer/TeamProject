@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamProject.Application.Abstracts.Repositories;
 using TeamProject.Application.Abstracts.Services;
 using TeamProject.Application.DTOs.CityDTOs;
+using TeamProject.Domain.Constants;
 using TeamProject.Domain.Entities;
 
 namespace TeamProject.WebApi.Controllers;
@@ -34,8 +36,9 @@ public class CityController : ControllerBase
         if (city == null) return NotFound("The city is not found");
         return Ok(city);
     }
-
+    
     [HttpPost]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Create(CityCreateRequestDto request, CancellationToken ct)
     {
         var result = await _cityService.CreateAsync(request, ct);
@@ -45,6 +48,7 @@ public class CityController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Update(int id, CityUpdateRequestDto request, CancellationToken ct)
     {
         var result = await _cityService.UpdateCityAsync(request, id, ct);
@@ -54,6 +58,7 @@ public class CityController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var result = await _cityService.DeleteCityAsync(id, ct);

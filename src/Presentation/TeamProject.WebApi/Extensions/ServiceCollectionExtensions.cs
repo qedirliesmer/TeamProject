@@ -20,6 +20,7 @@ using TeamProject.Persistence.Services;
 using TeamProject.Persistence.UnitOfWorks;
 using TeamProject.WebApi.Options;
 using Microsoft.OpenApi.Models;
+using TeamProject.Domain.Constants;
 
 namespace TeamProject.WebApi.Extensions;
 
@@ -57,15 +58,43 @@ public static class ServiceCollectionExtensions
         .AddEntityFrameworkStores<TeamProjectDbContext>() 
         .AddDefaultTokenProviders();
 
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName)); 
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            };
 
+            options.Events.OnRedirectToAccessDenied = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            };
+        });
+        services.Configure<SeedOptions>(configuration.GetSection(SeedOptions.SectionName));
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.ManageCities, p => p.RequireRole(RoleNames.Admin));
+
+            options.AddPolicy(Policies.ManageProperties, p => p.RequireAuthenticatedUser());
+        });
+
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
         services.ConfigureOptions<ConfigureJwtBearerOptions>();
+        var jwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
+                  ?? throw new InvalidOperationException("JWT section is missing.");
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer();
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
+        });
 
         services.AddSwaggerGen(c =>
         {

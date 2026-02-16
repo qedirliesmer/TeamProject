@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamProject.Application.Abstracts.Services;
 using TeamProject.Application.DTOs.DistrictDTOs;
+using TeamProject.Domain.Constants;
 
 namespace TeamProject.WebApi.Controllers;
 
@@ -38,6 +40,7 @@ public class DistrictController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Create([FromBody] DistrictCreateRequestDto request, CancellationToken ct)
     {
         var result = await _districtService.CreateDistrictAsync(request, ct);
@@ -48,6 +51,7 @@ public class DistrictController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Update(int id, [FromBody] DistrictUpdateRequestDto request, CancellationToken ct)
     {
         var result = await _districtService.UpdateDistrictAsync(request, id, ct);
@@ -58,6 +62,7 @@ public class DistrictController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = Policies.ManageCities)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var result = await _districtService.DeleteDistrictAsync(id, ct);

@@ -10,6 +10,7 @@ using TeamProject.Domain.Entities;
 using TeamProject.Application.DTOs.AuthDTOs;
 using Microsoft.Extensions.Options;
 using TeamProject.Application.Options;
+using TeamProject.Domain.Constants;
 
 namespace TeamProject.Persistence.Services;
 
@@ -18,15 +19,15 @@ public class AuthService : IAuthService
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IJwtTokenGenerator _jwtGenerator;
-    private readonly IRefreshTokenService _refreshTokenService; 
-    private readonly JwtOptions _jwtOptions; 
+    private readonly IRefreshTokenService _refreshTokenService;
+    private readonly JwtOptions _jwtOptions;
 
     public AuthService(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IJwtTokenGenerator jwtGenerator,
-        IRefreshTokenService refreshTokenService, 
-        IOptions<JwtOptions> jwtOptions) 
+        IRefreshTokenService refreshTokenService,
+        IOptions<JwtOptions> jwtOptions)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -37,7 +38,10 @@ public class AuthService : IAuthService
 
     private async Task<TokenResponse> BuildTokenResponseAsync(User user)
     {
-        var accessToken = _jwtGenerator.GenerateAccessToken(user);
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var accessToken = _jwtGenerator.GenerateAccessToken(user, roles);
+
         var refreshToken = await _refreshTokenService.CreateAsync(user);
 
         return new TokenResponse
@@ -48,7 +52,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<(bool Success, string? Error)> RegisterAsync(TeamProject.Application.DTOs.AuthDTOs.RegisterRequest request, CancellationToken ct = default)
+    public async Task<(bool Success, string? Error)> RegisterAsync(Application.DTOs.AuthDTOs.RegisterRequest request, CancellationToken ct = default)
     {
         var user = new User
         {
@@ -64,10 +68,12 @@ public class AuthService : IAuthService
             return (false, errors);
         }
 
+        await _userManager.AddToRoleAsync(user, RoleNames.User);
+
         return (true, null);
     }
 
-    public async Task<TokenResponse?> LoginAsync(TeamProject.Application.DTOs.AuthDTOs.LoginRequest request, CancellationToken ct = default)
+    public async Task<TokenResponse?> LoginAsync(Application.DTOs.AuthDTOs.LoginRequest request, CancellationToken ct = default)
     {
         var user = await _userManager.FindByEmailAsync(request.Login)
                     ?? await _userManager.FindByNameAsync(request.Login);
