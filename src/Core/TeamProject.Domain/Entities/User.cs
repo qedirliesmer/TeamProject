@@ -10,4 +10,5 @@ namespace TeamProject.Domain.Entities;
 public class User:IdentityUser
 {
     public string? FullName { get; set; }
+    public ICollection<PropertyAd> PropertyAds { get; set; } = new List<PropertyAd>();
 }

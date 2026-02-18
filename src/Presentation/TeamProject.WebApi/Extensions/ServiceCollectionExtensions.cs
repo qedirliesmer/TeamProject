@@ -53,7 +53,8 @@ public static class ServiceCollectionExtensions
         services.AddIdentity<User, IdentityRole>(options =>
         {
             options.Password.RequiredLength = 8; 
-            options.User.RequireUniqueEmail = true; 
+            options.User.RequireUniqueEmail = true;
+            options.SignIn.RequireConfirmedEmail = true;
         })
         .AddEntityFrameworkStores<TeamProjectDbContext>() 
         .AddDefaultTokenProviders();
@@ -79,6 +80,8 @@ public static class ServiceCollectionExtensions
             options.AddPolicy(Policies.ManageCities, p => p.RequireRole(RoleNames.Admin));
 
             options.AddPolicy(Policies.ManageProperties, p => p.RequireAuthenticatedUser());
+
+            options.AddPolicy("Admin", p => p.RequireRole(RoleNames.Admin));
         });
 
 
@@ -123,11 +126,12 @@ public static class ServiceCollectionExtensions
         }
     });
         });
-
+     
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
-    
+        services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.SectionName));
+        services.AddScoped<IEmailService, SmtpEmailService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IAuthService, AuthService>();
 

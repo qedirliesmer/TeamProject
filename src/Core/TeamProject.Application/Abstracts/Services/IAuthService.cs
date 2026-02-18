@@ -11,9 +11,9 @@ namespace TeamProject.Application.Abstracts.Services;
 public interface IAuthService
 {
     Task<(bool Success, string? Error)> RegisterAsync(DTOs.AuthDTOs.RegisterRequest request, CancellationToken ct = default);
-
-    Task<TokenResponse?> LoginAsync(DTOs.AuthDTOs.LoginRequest request, CancellationToken ct = default);
+    Task<(TokenResponse? Response, string? Error)> LoginAsync(Application.DTOs.AuthDTOs.LoginRequest request, CancellationToken ct = default);
 
     Task<TokenResponse?> RefreshTokenAsync(string refreshToken);
+    Task<bool> ConfirmEmailAsync(string userId, string token);
 
 }

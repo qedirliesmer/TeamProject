@@ -25,6 +25,10 @@ public class PropertyAdConfiguration : IEntityTypeConfiguration<PropertyAd>
         builder.HasMany(x => x.MediaItems)
                .WithOne(x => x.PropertyAd)
                .HasForeignKey(x => x.PropertyAdId)
-               .OnDelete(DeleteBehavior.Cascade); 
+               .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.User)
+           .WithMany(x => x.PropertyAds)
+           .HasForeignKey(x => x.UserId)
+           .OnDelete(DeleteBehavior.Cascade); 
     }
 }

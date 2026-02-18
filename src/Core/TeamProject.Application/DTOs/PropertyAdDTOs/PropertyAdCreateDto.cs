@@ -17,6 +17,7 @@ public class PropertyAdCreateDto
     public bool IsMortgage { get; set; }
     public int OfferType { get; set; }
     public int PropertyCategory { get; set; }
+    public string UserId { get; set; }
     public List<MediaUploadInput> MediaFiles { get; set; } = new();
 
 }

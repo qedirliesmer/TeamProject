@@ -18,6 +18,8 @@ public class PropertyAd:BaseEntity<int>
     public bool IsMortgage { get; set; }
     public OfferType OfferType { get; set; }
     public PropertyCategory PropertyCategory { get; set; }
+    public string UserId { get; set; }
+    public User User { get; set; } 
     public ICollection<PropertyMedia> MediaItems { get; set; } = [];
 
 }

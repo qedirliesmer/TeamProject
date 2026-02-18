@@ -18,4 +18,6 @@ public class PropertyAdGetByIdDto
     public bool IsMortgage { get; set; }
     public string OfferTypeName { get; set; }
     public string CategoryName { get; set; }
+    public string OwnerFullName { get; set; }
+    public string OwnerEmail { get; set; }
 }

@@ -9,4 +9,5 @@ namespace TeamProject.Application.Abstracts.Repositories;
 
 public interface IPropertyAdRepository: IRepository<PropertyAd, int>
 {
+    Task<PropertyAd?> GetWithDetailsAsync(int id);
 }
